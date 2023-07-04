@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/qr"
+            android:title="Scan Qr"
+            android:icon="@drawable/baseline_qr_code_scanner_24"/>
+        <item
+            android:id="@+id/lista"
+            android:title="Lista dei posti nascosti" />
+        <item
+            android:id="@+id/menu_item3"
+            android:title="Opzione 3" />
+    </group>
+
+    <item android:title="Altro">
+        <menu>
+            <item
+                android:id="@+id/menu_item4"
+                android:title="Opzione 4" />
+            <item
+                android:id="@+id/menu_item5"
+                android:title="Opzione 5" />
+        </menu>
+    </item>
+</menu>
