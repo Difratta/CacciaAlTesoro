@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,9 +34,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,24 +45,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private List<LatLng> hiddenPoints;
     private List<Marker> visibleMarkers;
     private Circle searchCircle;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
-    private List<String> qrCodes = Arrays.asList(
-            "Complimenti hai trovato l'oggetto n.1",
-            "Complimenti hai trovato l'oggetto n.2",
-            "Complimenti hai trovato l'oggetto n.3",
-            "Complimenti hai trovato l'oggetto n.4",
-            "Complimenti hai trovato l'oggetto n.5",
-            "Complimenti hai trovato l'oggetto n.6",
-            "Complimenti hai trovato l'oggetto n.7",
-            "Complimenti hai trovato l'oggetto n.8",
-            "Complimenti hai trovato l'oggetto n.9",
-            "Complimenti hai trovato l'oggetto n.10"
-    );
+    private final ListaLuoghiActivity listaLuoghiActivity = new ListaLuoghiActivity();
+    private List<MarkerInfo> markerInfoList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        hiddenPoints = new ArrayList<>();
         visibleMarkers = new ArrayList<>();
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -93,30 +80,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
 
-        generateHiddenPoints();
 
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
         LatLng genoa = new LatLng(GENOA_LATITUDE, GENOA_LONGITUDE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(genoa, 12));
-
+        markerInfoList = listaLuoghiActivity.getLuoghi();
         mMap.setOnMyLocationChangeListener(location -> {
             if (location != null) {
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                 updateSearchCircle(currentLatLng);
 
-                for (LatLng point : hiddenPoints) {
+                for (MarkerInfo markerInfo : markerInfoList) {
                     float[] distance = new float[1];
                     Location.distanceBetween(currentLatLng.latitude, currentLatLng.longitude,
-                            point.latitude, point.longitude, distance);
+                            markerInfo.getLatitudine(), markerInfo.getLongitudine(), distance);
 
                     if (distance[0] <= RADIUS) {
-                        showHiddenPoint(point);
+                        LatLng point = new LatLng(markerInfo.getLatitudine(), markerInfo.getLongitudine());
+                        showHiddenPoint(point, markerInfo);
                     }
                 }
             }
@@ -151,27 +138,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void generateHiddenPoints() {
-        List<LatLng> fixedPoints = Arrays.asList(
-                new LatLng(44.412, 8.950),
-                new LatLng(44.410, 8.951),
-                new LatLng(44.408, 8.948),
-                new LatLng(44.409, 8.946),
-                new LatLng(44.406, 8.947),
-                new LatLng(44.407, 8.949),
-                new LatLng(44.404, 8.950),
-                new LatLng(44.402, 8.947),
-                new LatLng(44.403, 8.946),
-                new LatLng(44.400, 8.945)
-        );
-
-
-
-        for (LatLng point : fixedPoints) {
-            hiddenPoints.add(point);
-        }
-    }
-
     private void updateSearchCircle(LatLng center) {
         int strokeColor = Color.argb(100, 255, 0, 0);
         int fillColor = Color.argb(50, 255, 0, 0);
@@ -188,32 +154,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void showHiddenPoint(LatLng point) {
+    private void showHiddenPoint(LatLng point, MarkerInfo markerInfo) {
         int index = visibleMarkers.size();
-        if (index < qrCodes.size()) {
-            String qrCode = qrCodes.get(index);
-
+        if (index < listaLuoghiActivity.getLuoghi().size()) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(point)
-                    .title(getRandomPhrase())
-                    .snippet(qrCode);
+                    .title(markerInfo.getNome());
             Marker marker = mMap.addMarker(markerOptions);
             visibleMarkers.add(marker);
         }
-    }
-
-    private String getRandomPhrase() {
-        String[] phrases = {
-                "L'OGGETTO SI TROVA VICINO A UNA SCRITTA BLU",
-                "L'OGGETTO SI TROVA SOTTO A UNA MACCHINA",
-                "L'OGGETTO SI TROVA SOPRA A UN PALAZZO",
-                "L'OGGETTO SI TROVA ALLA DESTRA DI UNO DEI NEGOZI PIÚ IMPORTANTI DELLA ZONA",
-                "L'OGGETTO SI TROVA ALLA SINISTRA DI UNA STATUA"
-        };
-
-        Random random = new Random();
-        int index = random.nextInt(phrases.length);
-        return phrases[index];
     }
 
     public void scanQRCode(View view) {
@@ -228,12 +177,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null && result.getContents() != null) {
             String scannedQRCode = result.getContents();
+            markerInfoList = listaLuoghiActivity.getLuoghi();
 
             for (Marker marker : visibleMarkers) {
-                String qrCode = marker.getSnippet();
+                String qrCode = marker.getTitle();
                 if (qrCode != null && qrCode.equals(scannedQRCode)) {
+                    for(MarkerInfo markinfo : markerInfoList) {
+                        if(markinfo.getNome().equals(qrCode))
+                            markinfo.setTrovato(true);
+                    }
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    Toast.makeText(this, qrCode, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, qrCode, Toast.LENGTH_LONG).show();
                     break;
                 }
             }

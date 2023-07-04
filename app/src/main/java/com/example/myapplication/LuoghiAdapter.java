@@ -39,27 +39,26 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
     public class LuogoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nomeTextView;
-        private TextView latitudineTextView;
-        private TextView longitudineTextView;
-        private TextView trovatoTextView;
+
+        private TextView suggerimentoTextView;
         private TextView descrizioneTextView;
 
 
         public LuogoViewHolder(@NonNull View itemView) {
             super(itemView);
             nomeTextView = itemView.findViewById(R.id.nome_text_view);
-            latitudineTextView = itemView.findViewById(R.id.latitudine_text_view);
-            longitudineTextView = itemView.findViewById(R.id.longitudine_text_view);
-            trovatoTextView = itemView.findViewById(R.id.trovato_text_view);
+            suggerimentoTextView = itemView.findViewById(R.id.suggerimento_text_view);
             descrizioneTextView = itemView.findViewById(R.id.descrizione_text_view);
         }
 
         public void bind(MarkerInfo luogo) {
             nomeTextView.setText(luogo.getNome());
-            latitudineTextView.setText(String.valueOf(luogo.getLatitudine()));
-            longitudineTextView.setText(String.valueOf(luogo.getLongitudine()));
-            trovatoTextView.setText(String.valueOf(luogo.getTrovato()));
-            descrizioneTextView.setText(luogo.getDescrizione());
+            suggerimentoTextView.setText(luogo.getSuggerimento());
+            if(luogo.getTrovato()) {
+                descrizioneTextView.setText(luogo.getDescrizione());
+            } else {
+                descrizioneTextView.setText("Non trovato");
+            }
         }
     }
 }
