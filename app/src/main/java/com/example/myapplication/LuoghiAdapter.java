@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,14 +52,18 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
             descrizioneTextView = itemView.findViewById(R.id.descrizione_text_view);
         }
 
+        public void updateMarker(MarkerInfo luogo){
+            if (luogo.getTrovato()){
+                descrizioneTextView.setText(luogo.getDescrizione());
+                itemView.setBackgroundColor(Color.GREEN);
+            }else {
+                descrizioneTextView.setText("Non trovato");
+            }
+        }
+
         public void bind(MarkerInfo luogo) {
             nomeTextView.setText(luogo.getNome());
             suggerimentoTextView.setText(luogo.getSuggerimento());
-            if(luogo.getTrovato()) {
-                descrizioneTextView.setText(luogo.getDescrizione());
-            } else {
-                descrizioneTextView.setText("Non trovato");
-            }
         }
     }
 }

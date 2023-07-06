@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,16 +44,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final double GENOA_LATITUDE = 44.4056;
     private static final double GENOA_LONGITUDE = 8.9463;
     private static final int RADIUS = 5000;
-
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private List<Marker> visibleMarkers;
     private Circle searchCircle;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-
     private final ListaLuoghiActivity listaLuoghiActivity = new ListaLuoghiActivity();
     private List<MarkerInfo> markerInfoList = new ArrayList<>();
+    private LuoghiAdapter luoghiAdapter;
+    private RecyclerView recyclerView;
+
 
 
     @Override
@@ -79,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     @Override
@@ -183,13 +184,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String qrCode = marker.getTitle();
                 if (qrCode != null && qrCode.equals(scannedQRCode)) {
                     for(MarkerInfo markinfo : markerInfoList) {
-                        if(markinfo.getNome().equals(qrCode))
+                        Log.i("Prima dell' if: ", "Nome: " +markinfo.getNome()+""+markinfo.getTrovato());
+                        if(markinfo.getNome().equals(qrCode)){
                             markinfo.setTrovato(true);
+                        }
+                        Log.i("Dopo dell' if: ", "Nome: " +markinfo.getNome()+""+markinfo.getTrovato());
                     }
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     Toast.makeText(this, qrCode, Toast.LENGTH_LONG).show();
                     break;
                 }
+            }
+            if (luoghiAdapter != null) {
+                luoghiAdapter.notifyDataSetChanged();
             }
         }
     }

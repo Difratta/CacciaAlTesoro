@@ -9,13 +9,9 @@ public class MarkerInfo {
     private String nome;
     private double latitudine;
     private double longitudine;
-
     private String suggerimento;
     private String descrizione;
     private boolean trovato = false;
-    private Marker marker;
-
-
 
     public MarkerInfo(String nome, double latitudine, double longitudine, String descrizione, String suggerimento){
         this.nome = nome;
@@ -24,7 +20,6 @@ public class MarkerInfo {
         this.descrizione = descrizione;
         this.suggerimento = suggerimento;
     }
-
     public String getNome() {
         return nome;
     }
