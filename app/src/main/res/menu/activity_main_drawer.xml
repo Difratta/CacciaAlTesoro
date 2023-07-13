@@ -14,14 +14,4 @@
             android:title="Opzione 3" />
     </group>
 
-    <item android:title="Altro">
-        <menu>
-            <item
-                android:id="@+id/menu_item4"
-                android:title="Opzione 4" />
-            <item
-                android:id="@+id/menu_item5"
-                android:title="Opzione 5" />
-        </menu>
-    </item>
 </menu>

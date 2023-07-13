@@ -1,5 +1,7 @@
 package com.example.myapplication;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,15 +14,13 @@ public class ListaLuoghiActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private LuoghiAdapter luoghiAdapter;
-    private List<MarkerInfo> luoghi = new ArrayList<>();
-
-
+    private ArrayList<MarkerInfo> luoghi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_luoghi_layout);
 
-        // Recupero dei dati dei luoghi (esempio)
+        // Recupero dei luoghi
         luoghi = getLuoghi();
 
         // Configurazione del RecyclerView
@@ -28,13 +28,12 @@ public class ListaLuoghiActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Creazione e assegnazione dell'adapter
-        luoghiAdapter = new LuoghiAdapter(luoghi);
+        luoghiAdapter = new LuoghiAdapter(this.luoghi);
         recyclerView.setAdapter(luoghiAdapter);
-    }
 
-    // Metodo di esempio per ottenere la lista dei luoghi
-    public List<MarkerInfo> getLuoghi() {
-        List<MarkerInfo> luogo = new ArrayList<>();
+    }
+    public ArrayList<MarkerInfo> getLuoghi() {
+        ArrayList<MarkerInfo> luogo = new ArrayList<>();
         // Aggiungi i tuoi luoghi alla lista
         luogo.add(new MarkerInfo("Luogo 1", 44.41102381169466, 8.969132339177387, "Descrizione 1", "scritta bianco su sfondo arancione"));
         luogo.add(new MarkerInfo("Luogo 2", 44.411109, 8.969132339177387, "Descrizione 2", "suggerimetno caso"));
@@ -50,5 +49,9 @@ public class ListaLuoghiActivity extends AppCompatActivity {
         luogo.add(new MarkerInfo("Oggetto 10", 44.400, 8.945, "\"Complimenti hai trovato l'oggetto n.10\"", "suggerimento 10"));
 
         return luogo;
+    }
+
+    public void setLuoghi(ArrayList<MarkerInfo> luoghi) {
+        this.luoghi = luoghi;
     }
 }

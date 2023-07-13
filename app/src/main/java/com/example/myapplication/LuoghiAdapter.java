@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewHolder> {
 
-    private List<MarkerInfo> luoghi;
+    private final String TAG = "LuoghiAdapter";
+    private ArrayList<MarkerInfo> luoghi;
 
-    public LuoghiAdapter(List<MarkerInfo> luoghi) {
+    public LuoghiAdapter(ArrayList<MarkerInfo> luoghi) {
         this.luoghi = luoghi;
     }
 
@@ -31,16 +34,25 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
         MarkerInfo luogo = luoghi.get(position);
         holder.bind(luogo);
     }
-
     @Override
     public int getItemCount() {
+        if (luoghi == null) {
+            Log.d(TAG, "getItemCount: luoghi è null");
+            return 0;
+        }
         return luoghi.size();
     }
+
+    public void updateLuoghi(List<MarkerInfo> newLuoghi) {
+        luoghi.clear();
+        luoghi.addAll(newLuoghi);
+        notifyDataSetChanged();
+    }
+
 
     public class LuogoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nomeTextView;
-
         private TextView suggerimentoTextView;
         private TextView descrizioneTextView;
 
@@ -52,18 +64,16 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
             descrizioneTextView = itemView.findViewById(R.id.descrizione_text_view);
         }
 
-        public void updateMarker(MarkerInfo luogo){
-            if (luogo.getTrovato()){
-                descrizioneTextView.setText(luogo.getDescrizione());
-                itemView.setBackgroundColor(Color.GREEN);
-            }else {
-                descrizioneTextView.setText("Non trovato");
-            }
-        }
+
 
         public void bind(MarkerInfo luogo) {
             nomeTextView.setText(luogo.getNome());
             suggerimentoTextView.setText(luogo.getSuggerimento());
+            if (luogo.getTrovato()){
+                descrizioneTextView.setText(luogo.getDescrizione());
+            } else {
+                descrizioneTextView.setText("Non hai ancora trovato questo luogo");
+            }
         }
     }
 }

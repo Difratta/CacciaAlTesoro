@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -50,10 +52,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Circle searchCircle;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private final ListaLuoghiActivity listaLuoghiActivity = new ListaLuoghiActivity();
-    private List<MarkerInfo> markerInfoList = new ArrayList<>();
-    private LuoghiAdapter luoghiAdapter;
-    private RecyclerView recyclerView;
+    public ArrayList<MarkerInfo> markerInfoList = new ArrayList<>();
+    private ListaLuoghiActivity listaLuoghiActivity;
+    private LuoghiAdapter luoghiAdapter = new LuoghiAdapter(markerInfoList);
 
 
 
@@ -82,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+
+        listaLuoghiActivity = new ListaLuoghiActivity();
+        markerInfoList = listaLuoghiActivity.getLuoghi();
+        listaLuoghiActivity.setLuoghi(markerInfoList);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng genoa = new LatLng(GENOA_LATITUDE, GENOA_LONGITUDE);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(genoa, 12));
-        markerInfoList = listaLuoghiActivity.getLuoghi();
+
         mMap.setOnMyLocationChangeListener(location -> {
             if (location != null) {
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -157,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void showHiddenPoint(LatLng point, MarkerInfo markerInfo) {
         int index = visibleMarkers.size();
-        if (index < listaLuoghiActivity.getLuoghi().size()) {
+        if (index < markerInfoList.size()) {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(point)
                     .title(markerInfo.getNome());
@@ -178,26 +183,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null && result.getContents() != null) {
             String scannedQRCode = result.getContents();
-            markerInfoList = listaLuoghiActivity.getLuoghi();
 
             for (Marker marker : visibleMarkers) {
                 String qrCode = marker.getTitle();
                 if (qrCode != null && qrCode.equals(scannedQRCode)) {
                     for(MarkerInfo markinfo : markerInfoList) {
-                        Log.i("Prima dell' if: ", "Nome: " +markinfo.getNome()+""+markinfo.getTrovato());
+                        Log.i("Prima dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
                         if(markinfo.getNome().equals(qrCode)){
                             markinfo.setTrovato(true);
+                            Log.i("Dopo dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
+                            break;
                         }
-                        Log.i("Dopo dell' if: ", "Nome: " +markinfo.getNome()+""+markinfo.getTrovato());
                     }
                     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     Toast.makeText(this, qrCode, Toast.LENGTH_LONG).show();
                     break;
                 }
             }
-            if (luoghiAdapter != null) {
-                luoghiAdapter.notifyDataSetChanged();
-            }
+            luoghiAdapter.updateLuoghi(markerInfoList);
         }
     }
     @Override
@@ -212,4 +215,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
