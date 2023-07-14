@@ -64,8 +64,6 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
             descrizioneTextView = itemView.findViewById(R.id.descrizione_text_view);
         }
 
-
-
         public void bind(MarkerInfo luogo) {
             nomeTextView.setText(luogo.getNome());
             suggerimentoTextView.setText(luogo.getSuggerimento());

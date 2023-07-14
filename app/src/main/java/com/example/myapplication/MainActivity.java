@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public ArrayList<MarkerInfo> markerInfoList = new ArrayList<>();
     private ListaLuoghiActivity listaLuoghiActivity;
     private LuoghiAdapter luoghiAdapter = new LuoghiAdapter(markerInfoList);
+    private RecyclerView recyclerView;
+
+    private ArrayList<String> nomeLuoghi = new ArrayList<>();
 
 
 
@@ -83,10 +86,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
+        recyclerView = findViewById(R.id.recyclerView);
+
 
         listaLuoghiActivity = new ListaLuoghiActivity();
         markerInfoList = listaLuoghiActivity.getLuoghi();
-        listaLuoghiActivity.setLuoghi(markerInfoList);
+
     }
 
     @Override
@@ -191,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Log.i("Prima dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
                         if(markinfo.getNome().equals(qrCode)){
                             markinfo.setTrovato(true);
+                            nomeLuoghi.add(markinfo.getNome());
                             Log.i("Dopo dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
                             break;
                         }
@@ -200,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     break;
                 }
             }
-            luoghiAdapter.updateLuoghi(markerInfoList);
         }
     }
     @Override
@@ -209,7 +214,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (id == R.id.qr) {
             scanQRCode(null);
         }else if (id == R.id.lista) {
-            Intent intent = new Intent(this, ListaLuoghiActivity.class);
+            Intent intent = new Intent(MainActivity.this, ListaLuoghiActivity.class);
+            Log.i("Nome luoghi: ", nomeLuoghi.toString());
+            intent.putExtra("nomeLuoghi", nomeLuoghi);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);

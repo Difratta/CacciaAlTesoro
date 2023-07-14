@@ -15,20 +15,32 @@ public class ListaLuoghiActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LuoghiAdapter luoghiAdapter;
     private ArrayList<MarkerInfo> luoghi;
+    private ArrayList<String> nomeLuoghi = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista_luoghi_layout);
 
         // Recupero dei luoghi
+        nomeLuoghi = getIntent().getStringArrayListExtra("nomeLuoghi");
         luoghi = getLuoghi();
+        Log.i("luoghi", luoghi.toString());
+        Log.i("nomeLuoghi", nomeLuoghi.toString());
+        for (MarkerInfo luogo : luoghi) {
+            for (String nome : nomeLuoghi) {
+                if (luogo.getNome().equals(nome)) {
+                    luogo.setTrovato(true);
+                    Log.i("trovato", luogo.getNome() + " " + luogo.getTrovato());
+                }
+            }
+        }
 
         // Configurazione del RecyclerView
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recyclerViewListaLuoghi);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Creazione e assegnazione dell'adapter
-        luoghiAdapter = new LuoghiAdapter(this.luoghi);
+        luoghiAdapter = new LuoghiAdapter(luoghi);
         recyclerView.setAdapter(luoghiAdapter);
 
     }
@@ -49,9 +61,5 @@ public class ListaLuoghiActivity extends AppCompatActivity {
         luogo.add(new MarkerInfo("Oggetto 10", 44.400, 8.945, "\"Complimenti hai trovato l'oggetto n.10\"", "suggerimento 10"));
 
         return luogo;
-    }
-
-    public void setLuoghi(ArrayList<MarkerInfo> luoghi) {
-        this.luoghi = luoghi;
     }
 }
