@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -53,12 +55,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     public ArrayList<MarkerInfo> markerInfoList = new ArrayList<>();
-    private ListaLuoghiActivity listaLuoghiActivity;
-    private LuoghiAdapter luoghiAdapter = new LuoghiAdapter(markerInfoList);
     private RecyclerView recyclerView;
-
     private ArrayList<String> nomeLuoghi = new ArrayList<>();
-
+    private DB db;
+    private SQLiteDatabase database;
 
 
     @Override
@@ -82,16 +82,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(this);
         recyclerView = findViewById(R.id.recyclerView);
 
-
-        listaLuoghiActivity = new ListaLuoghiActivity();
-        markerInfoList = listaLuoghiActivity.getLuoghi();
-
+        db = new DB(this);
+        markerInfoList = db.getAllLuoghi();
     }
 
     @Override
@@ -167,10 +164,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void showHiddenPoint(LatLng point, MarkerInfo markerInfo) {
         int index = visibleMarkers.size();
+        MarkerOptions markerOptions;
         if (index < markerInfoList.size()) {
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(point)
-                    .title(markerInfo.getNome());
+            if(markerInfo.getTrovato()){
+                markerOptions = new MarkerOptions()
+                        .position(point)
+                        .title(markerInfo.getNome())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            }else {
+                markerOptions = new MarkerOptions()
+                        .position(point)
+                        .title(markerInfo.getNome());
+            }
             Marker marker = mMap.addMarker(markerOptions);
             visibleMarkers.add(marker);
         }
@@ -195,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     for(MarkerInfo markinfo : markerInfoList) {
                         Log.i("Prima dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
                         if(markinfo.getNome().equals(qrCode)){
+                            db.updateTrovato(markinfo.getNome());
                             markinfo.setTrovato(true);
-                            nomeLuoghi.add(markinfo.getNome());
                             Log.i("Dopo dell' if: ", "Nome: " +markinfo.getNome()+" "+markinfo.getTrovato());
                             break;
                         }
@@ -215,12 +220,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             scanQRCode(null);
         }else if (id == R.id.lista) {
             Intent intent = new Intent(MainActivity.this, ListaLuoghiActivity.class);
-            Log.i("Nome luoghi: ", nomeLuoghi.toString());
-            intent.putExtra("nomeLuoghi", nomeLuoghi);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
     }
 
 
