@@ -8,10 +8,12 @@
             android:icon="@drawable/baseline_qr_code_scanner_24"/>
         <item
             android:id="@+id/lista"
-            android:title="Lista dei posti nascosti" />
+            android:title="Lista dei posti nascosti"
+            android:icon="@drawable/lista"/>
         <item
             android:id="@+id/lista_immagini"
-            android:title="foto dei Luoghi" />
+            android:title="Foto dei Luoghi"
+            android:icon="@drawable/fotocamera" />
     </group>
 
     <item android:title="Altro">
