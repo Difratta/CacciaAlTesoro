@@ -41,99 +41,84 @@ public class DB extends SQLiteOpenHelper {
     //funzione per popolare la lista di luoghi con i dati iniziali
     private void insertInitialData(SQLiteDatabase db) {
         ContentValues values = new ContentValues();
-        //primo luogo
-        values.put("nome", "Luogo 1");
-        values.put("latitudine", 44.41102381169466);
-        values.put("longitudine", 8.969132339177387);
-        values.put("descrizione", "Descrizione 1");
-        values.put("suggerimento", "scritta bianco su sfondo arancione");
-        db.insert("luoghi", null, values);
-        //secondo luogo
-        values.clear();
-        values.put("nome", "Luogo 2");
-        values.put("latitudine", 44.411109);
-        values.put("longitudine", 8.969132339177387);
-        values.put("descrizione", "Descrizione 2");
-        values.put("suggerimento", "suggerimetno caso");
-        db.insert("luoghi", null, values);
-        //oggetto 1
+        //oggetto 1 Opera Pia
         values.clear();
         values.put("nome", "Oggetto 1");
-        values.put("latitudine", 44.412);
-        values.put("longitudine", 8.950);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.1\"");
+        values.put("latitudine", 44.40300312136162);
+        values.put("longitudine", 8.95874172447634);
+        values.put("descrizione", "\"Complimenti hai trovato Opera Pia\"");
         values.put("suggerimento", "suggerimento 1");
         db.insert("luoghi", null, values);
-        //oggetto 2
+        //oggetto 2 De Ferrari
         values.clear();
         values.put("nome", "Oggetto 2");
-        values.put("latitudine", 44.410);
-        values.put("longitudine", 8.951);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.2\"");
+        values.put("latitudine", 44.407166184906025);
+        values.put("longitudine", 8.934047754599241);
+        values.put("descrizione", "\"Complimenti hai trovato De Ferrari\"");
         values.put("suggerimento", "suggerimento 2");
         db.insert("luoghi", null, values);
-        //oggetto 3
+        //oggetto 3 Brignole
         values.clear();
         values.put("nome", "Oggetto 3");
-        values.put("latitudine", 44.408);
-        values.put("longitudine", 8.948);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.3\"");
+        values.put("latitudine", 44.406509517234674);
+        values.put("longitudine", 8.94665942143637);
+        values.put("descrizione", "\"Complimenti hai trovato Brignole\"");
         values.put("suggerimento", "suggerimento 3");
         db.insert("luoghi", null, values);
-        //oggetto 4
+        //oggetto 4 Stadio
         values.clear();
         values.put("nome", "Oggetto 4");
-        values.put("latitudine", 44.409);
-        values.put("longitudine", 8.946);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.4\"");
+        values.put("latitudine", 44.416445545940384);
+        values.put("longitudine", 8.952582884030504);
+        values.put("descrizione", "\"Complimenti hai trovato Stadio\"");
         values.put("suggerimento", "suggerimento 4");
         db.insert("luoghi", null, values);
-        //oggetto 5
+        //oggetto 5 F Santa Tecla
         values.clear();
         values.put("nome", "Oggetto 5");
-        values.put("latitudine", 44.406);
-        values.put("longitudine", 8.947);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.5\"");
+        values.put("latitudine", 44.412949524715536);
+        values.put("longitudine", 8.977010117568442);
+        values.put("descrizione", "\"Complimenti hai trovato F. Santa Tecla\"");
         values.put("suggerimento", "suggerimento 5");
         db.insert("luoghi", null, values);
-        //oggetto 6
+        //oggetto 6 Acquario
         values.clear();
         values.put("nome", "Oggetto 6");
-        values.put("latitudine", 44.407);
-        values.put("longitudine", 8.949);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.6\"");
+        values.put("latitudine", 44.41105494216552);
+        values.put("longitudine", 8.926743177093758);
+        values.put("descrizione", "\"Complimenti hai trovato Acquario\"");
         values.put("suggerimento", "suggerimento 6");
         db.insert("luoghi", null, values);
-        //oggetto 7
+        //oggetto 7 Lanterna
         values.clear();
         values.put("nome", "Oggetto 7");
-        values.put("latitudine", 44.404);
-        values.put("longitudine", 8.950);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.7\"");
+        values.put("latitudine", 44.40639497370395);
+        values.put("longitudine", 8.90428824049446);
+        values.put("descrizione", "\"Complimenti hai trovato Lanterna\"");
         values.put("suggerimento", "suggerimento 7");
         db.insert("luoghi", null, values);
-        //oggetto 8
+        //oggetto 8 Fiumara
         values.clear();
         values.put("nome", "Oggetto 8");
-        values.put("latitudine", 44.402);
-        values.put("longitudine", 8.947);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.8\"");
+        values.put("latitudine", 44.413743216845795);
+        values.put("longitudine", 8.881833303985164);
+        values.put("descrizione", "\"Complimenti hai trovato Fiumara\"");
         values.put("suggerimento", "suggerimento 8");
         db.insert("luoghi", null, values);
-        //oggetto 9
+        //oggetto 9 Opera Pia 2
         values.clear();
         values.put("nome", "Oggetto 9");
-        values.put("latitudine", 44.403);
-        values.put("longitudine", 8.946);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.9\"");
+        values.put("latitudine", 44.40314593337858);
+        values.put("longitudine", 8.959742173363937);
+        values.put("descrizione", "\"Complimenti hai trovato Opera Pia 2\"");
         values.put("suggerimento", "suggerimento 9");
         db.insert("luoghi", null, values);
-        //oggetto 10
+        //oggetto 10 Villa Imperiale
         values.clear();
         values.put("nome", "Oggetto 10");
-        values.put("latitudine", 44.400);
-        values.put("longitudine", 8.945);
-        values.put("descrizione", "\"Complimenti hai trovato l'oggetto n.10\"");
+        values.put("latitudine", 44.40850595451148);
+        values.put("longitudine", 8.961645014141085);
+        values.put("descrizione", "\"Complimenti hai trovato Villa Imperiale\"");
         values.put("suggerimento", "suggerimento 10");
         db.insert("luoghi", null, values);
 

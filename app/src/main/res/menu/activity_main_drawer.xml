@@ -19,7 +19,7 @@
             <item
                 android:id="@+id/esci"
                 android:title="Esci"
-                android:icon="@color/design_default_color_primary_dark"/>
+                android:icon="@drawable/exit"/>
         </menu>
     </item>
 
