@@ -221,6 +221,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }else if (id == R.id.lista) {
             Intent intent = new Intent(MainActivity.this, ListaLuoghiActivity.class);
             startActivity(intent);
+        }else if(id == R.id.lista_immagini){
+            Intent intent = new Intent(MainActivity.this, ListaImgActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.esci) {
+            finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -229,6 +234,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onDestroy();
         db.close();
     }
-
-
 }

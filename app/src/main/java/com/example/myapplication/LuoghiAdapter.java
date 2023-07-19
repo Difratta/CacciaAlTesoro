@@ -43,13 +43,6 @@ public class LuoghiAdapter extends RecyclerView.Adapter<LuoghiAdapter.LuogoViewH
         return luoghi.size();
     }
 
-    public void updateLuoghi(List<MarkerInfo> newLuoghi) {
-        luoghi.clear();
-        luoghi.addAll(newLuoghi);
-        notifyDataSetChanged();
-    }
-
-
     public class LuogoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nomeTextView;

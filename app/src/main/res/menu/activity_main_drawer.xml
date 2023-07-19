@@ -10,8 +10,17 @@
             android:id="@+id/lista"
             android:title="Lista dei posti nascosti" />
         <item
-            android:id="@+id/menu_item3"
-            android:title="Opzione 3" />
+            android:id="@+id/lista_immagini"
+            android:title="foto dei Luoghi" />
     </group>
+
+    <item android:title="Altro">
+        <menu>
+            <item
+                android:id="@+id/esci"
+                android:title="Esci"
+                android:icon="@color/design_default_color_primary_dark"/>
+        </menu>
+    </item>
 
 </menu>
